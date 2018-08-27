@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.likai.activiti5.dao.IGroupMapper">
+
+	<resultMap type="com.likai.activiti5.pojo.Group" id="BaseResultMap">
+		<id column="ID_" property="id"/>
+		<result column="NAME_" property="name"/>
+	</resultMap>
+	
+	<sql id="BaseSelect">
+		ID_, NAME_
+	</sql>
+	
+	<select id="selectList" parameterType="com.likai.activiti5.pojo.Group" resultMap="BaseResultMap">
+		SELECT
+			<include refid="BaseSelect"></include>
+		FROM act_id_group t
+		<where>
+			<if test="name != null and name != ''">
+				AND t.NAME_ LIKE CONCAT('%',#{name},'%')
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+			<include refid="BaseSelect"></include>
+		FROM act_id_group t
+		WHERE t.ID_=#{id}
+	</select>
+	
+	<insert id="insertInfo" parameterType="com.likai.activiti5.pojo.Group">
+		INSERT INTO act_id_group
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">
+				ID_,
+			</if>
+			<if test="name != null and name != ''">
+				NAME_,
+			</if>
+			
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">
+				#{id},
+			</if>
+			<if test="name != null and name != ''">
+				#{name},
+			</if>
+			
+		</trim>
+	</insert>
+	
+	<update id="updateInfo" parameterType="com.likai.activiti5.pojo.Group">
+		UPDATE act_id_group
+		<set>
+			<if test="name != null and name != ''">
+				NAME_=#{name},
+			</if>
+		</set>
+		WHERE ID_=#{id}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.String">
+		DELETE FROM act_id_group WHERE ID_=#{id}
+	</delete>
+	
+	<select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT a.ID_, a.NAME_
+		FROM act_id_group a LEFT JOIN act_id_membership b ON a.ID_=b.GROUP_ID_ 
+		WHERE b.USER_ID_=#{id}
+	</select>
+	
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.likai.activiti5.dao.IUserMapper">
+
+	<resultMap type="com.likai.activiti5.pojo.User" id="BaseResultMap">
+		<id column="ID_" property="id"/>
+		<result column="FIRST_" property="firstName"/>
+		<result column="LAST_" property="lastName"/>
+		<result column="EMAIL_" property="email"/>
+		<result column="PWD_" property="password"/>
+	</resultMap>
+	
+	<sql id="BaseSelect">
+		ID_, FIRST_, LAST_, EMAIL_, PWD_
+	</sql>
+	
+	<select id="selectList" parameterType="com.likai.activiti5.pojo.User" resultMap="BaseResultMap">
+		SELECT
+			<include refid="BaseSelect"></include>
+		FROM act_id_user t
+		<where>
+			<if test="id != null and id != ''">
+				t.ID_ LIKE CONCAT('%',#{id},'%')
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+			<include refid="BaseSelect"></include>
+		FROM act_id_user t
+		WHERE t.ID_=#{id}
+	</select>
+	
+	<insert id="insertInfo" parameterType="com.likai.activiti5.pojo.User">
+		INSERT INTO act_id_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">
+				ID_,
+			</if>
+			<if test="firstName != null and firstName != ''">
+				FIRST_,
+			</if>
+			<if test="lastName != null and lastName != ''">
+				LAST_,
+			</if>
+			<if test="email != null and email != ''">
+				EMAIL_,
+			</if>
+			<if test="password != null and password != ''">
+				PWD_,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">
+				#{id},
+			</if>
+			<if test="firstName != null and firstName != ''">
+				#{firstName},
+			</if>
+			<if test="lastName != null and lastName != ''">
+				#{lastName},
+			</if>
+			<if test="email != null and email != ''">
+				#{email},
+			</if>
+			<if test="password != null and password != ''">
+				#{password},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateInfo" parameterType="com.likai.activiti5.pojo.User">
+		UPDATE act_id_user
+		<set>
+			<if test="firstName != null and firstName != ''">
+				FIRST_=#{firstName},
+			</if>
+			<if test="lastName != null and lastName != ''">
+				LAST_=#{lastName},
+			</if>
+			<if test="email != null and email != ''">
+				EMAIL_=#{email},
+			</if>
+			<if test="password != null and password != ''">
+				PWD_=#{password},
+			</if>
+		</set>
+		WHERE ID_=#{id}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.String">
+		DELETE FROM act_id_user WHERE ID_=#{id}
+	</delete>
+</mapper>

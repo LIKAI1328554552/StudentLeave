@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.likai.activiti5.dao.IMemberShipMapper">
+
+	<resultMap type="com.likai.activiti5.pojo.MemberShip" id="BaseResultMap">
+		<association property="user" javaType="com.likai.activiti5.pojo.User" >
+			<id column="userId" property="id"/>
+			<result column="password" property="password"/>
+			<result column="lastName" property="lastName"/>
+			<result column="firstName" property="firstName"/>
+		</association>
+		<association property="group" javaType="com.likai.activiti5.pojo.Group">
+			<id column="groupId" property="id"/>
+			<result column="groupName" property="name"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectByUserNameAndPWDAndGroupId" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT a.ID_ userId, a.PWD_ password, a.FIRST_ firstName, a.LAST_ lastName, c.ID_ groupId, c.NAME_ groupName
+		FROM act_id_user a, act_id_membership b, act_id_group c
+		WHERE a.ID_=b.USER_ID_ 
+			AND c.ID_=b.GROUP_ID_
+			AND a.ID_=#{userName}
+			AND a.PWD_=#{password}
+			AND c.ID_=#{groupId}
+	</select>
+	
+	<delete id="deleteById" parameterType="java.util.Map">
+		DELETE FROM act_id_membership 
+		<where>
+			<if test="userId != null and userId != ''">
+				AND USER_ID_=#{userId}
+			</if>
+			<if test="groupId != null and groupId != ''">
+				AND GROUP_ID_=#{groupId}
+			</if>
+		</where>
+	</delete>
+	
+	<insert id="insertInfo" parameterType="java.util.Map">
+		INSERT INTO act_id_membership
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null and userId != ''">
+				USER_ID_,
+			</if>
+			<if test="groupId != null and groupId != ''">
+				GROUP_ID_,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null and userId != ''">
+				#{userId},
+			</if>
+			<if test="groupId != null and groupId != ''">
+				#{groupId},
+			</if>
+		</trim>
+	</insert>
+	
+</mapper>
