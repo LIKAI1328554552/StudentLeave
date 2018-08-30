@@ -28,6 +28,10 @@ import com.likai.activiti5.utils.AnswerJson;
 import com.likai.activiti5.utils.CryptographyUtil;
 import com.likai.activiti5.utils.PageList;
 
+/**
+ * UserController created by likai
+ * @since 2018-07-01
+ */
 @Controller
 @RequestMapping(value="/user")
 public class UserController {
